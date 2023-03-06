@@ -2,28 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-// packages
 package frc.robot.commands;
 
-// imports
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drivetrain;
+import frc.robot.subsystems.arm;
 
-public class driveCommand extends CommandBase {
- 
+public class extendArmCommand extends CommandBase {
+  
   // variables
-  private final DoubleSupplier leftSpeed;
-  private final DoubleSupplier rightSpeed;
-  private final drivetrain m_drivetrain;
- 
-  /** Creates a new driveCommand. */
-  public driveCommand(DoubleSupplier lSpeed, DoubleSupplier rSpeed, drivetrain Drivetrain) {
+  private final arm m_arm;
+  
+  /** Creates a new armCommand. */
+  public extendArmCommand(arm Arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    leftSpeed = lSpeed;
-    rightSpeed = rSpeed;
-    m_drivetrain = Drivetrain;
-    addRequirements(m_drivetrain);
+    m_arm = Arm;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -33,13 +26,13 @@ public class driveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble());
+    m_arm.extend();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.tankDrive(0d, 0d);
+    m_arm.idle();
   }
 
   // Returns true when the command should end.
