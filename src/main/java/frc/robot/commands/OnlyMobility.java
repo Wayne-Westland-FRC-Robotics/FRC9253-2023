@@ -10,13 +10,20 @@ import frc.robot.subsystems.drivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoDriveBackwards extends SequentialCommandGroup {
-  /** Creates a new AutoDriveBackwards. */
-  public AutoDriveBackwards(drivetrain drive) {
+public class OnlyMobility extends SequentialCommandGroup {
+  
+  // variables
+  private final drivetrain m_drivetrain;
+  
+  /** Creates a new OnlyMobility. */
+  public OnlyMobility(drivetrain drive) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    m_drivetrain = drive;
+    addRequirements(m_drivetrain);
+    
     addCommands(
-      new driveAuto(-.5, -.5, drive).withTimeout(2)
+      new driveAuto(-0.5, -0.5, m_drivetrain).withTimeout(3)
     );
   }
 }

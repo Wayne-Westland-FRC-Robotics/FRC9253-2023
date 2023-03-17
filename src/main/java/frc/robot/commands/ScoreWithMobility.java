@@ -13,34 +13,30 @@ import frc.robot.subsystems.intake;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class autoBluePath extends SequentialCommandGroup {
-  
-  // subsystems
+public class ScoreWithMobility extends SequentialCommandGroup {
+ 
+  // variables
   private final drivetrain m_drivetrain;
   private final arm m_arm;
   private final intake m_intake;
-  
-  /** Creates a new autoBluePath. */
-  public autoBluePath(drivetrain drivetrain, arm arm, intake intake) {
-    m_drivetrain = drivetrain;
+ 
+  /** Creates a new ScoreWithMobility. */
+  public ScoreWithMobility(drivetrain drive, arm arm, intake intake) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+
+    m_drivetrain = drive;
     m_arm = arm;
     m_intake = intake;
     addRequirements(m_drivetrain, m_arm, m_intake);
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(
       new ParallelCommandGroup(
-        new driveAuto(0.5, 0.5, m_drivetrain).withTimeout(0.5),
-        new extendArmCommand(m_arm).withTimeout(0.5)
-      ),
+        new driveAuto(0.5, 0.5, m_drivetrain),
+        new extendArmCommand(m_arm)
+      .withTimeout(2)),
       new pushIntakeCommand(m_intake).withTimeout(0.5),
-      new driveAuto(-0.5,-0.5, m_drivetrain).withTimeout(6),
-      new ParallelCommandGroup(
-       new pullIntakeCommand(m_intake).withTimeout(1),
-       new extendArmCommand(m_arm).withTimeout(1)
-      ),
-      new driveAuto(0.5, 0.5, m_drivetrain).withTimeout(6),
-      new pushIntakeCommand(m_intake).withTimeout(1)
+      new driveAuto(-0.5, -0.5, m_drivetrain)
     );
   }
 }

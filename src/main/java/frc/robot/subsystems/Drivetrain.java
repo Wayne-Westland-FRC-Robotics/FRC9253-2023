@@ -24,21 +24,37 @@ public class drivetrain extends SubsystemBase {
 
   private final DifferentialDrive diffDrive = new DifferentialDrive(leftMotors, rightMotors);
 
+  /**
+   * set the speed and rotation for arcade driving
+   * @param forwardSpeed the speed at which the robot moves forward
+   * @param rotation the speed of rotation
+   */
   public void arcadeDrive(Double forwardSpeed, Double rotation) {
     diffDrive.arcadeDrive(forwardSpeed, rotation);
   }
 
+  /**
+   * set the speed of the motors for tank driving
+   * @param leftSpeed the speed of the left motors
+   * @param rightSpeed the speed of the right motors
+   */
   public void tankDrive(double leftSpeed, double rightSpeed) {
     diffDrive.tankDrive(-leftSpeed, rightSpeed);
   }
 
-  
+  /**
+   * start the brakes for the drivetrain
+   */
   public void startBrake() {
     leftMotor1.setNeutralMode(NeutralMode.Brake);
     leftMotor2.setNeutralMode(NeutralMode.Brake);
     rightMotor1.setNeutralMode(NeutralMode.Brake);
     rightMotor2.setNeutralMode(NeutralMode.Brake);
   }
+
+  /**
+   * stop the brakes for the drivetrain
+   */
   public void stopBrake() {
     leftMotor1.setNeutralMode(NeutralMode.Coast);
     leftMotor2.setNeutralMode(NeutralMode.Coast);

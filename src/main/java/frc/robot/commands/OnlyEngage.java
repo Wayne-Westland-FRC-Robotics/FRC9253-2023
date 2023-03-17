@@ -4,37 +4,30 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.arm;
+import frc.robot.Robot;
 import frc.robot.subsystems.drivetrain;
-import frc.robot.subsystems.intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class autoYellowPath extends SequentialCommandGroup {
+public class OnlyEngage extends SequentialCommandGroup {
   
-  // subsystems
+  // variables
   private final drivetrain m_drivetrain;
-  private final arm m_arm;
-  private final intake m_intake;
+  private final Robot m_robot;
   
-  /** Creates a new autoYellowPath. */
-  public autoYellowPath(drivetrain drivetrain, arm arm, intake intake) {
-    
-    m_drivetrain = drivetrain;
-    m_arm = arm;
-    m_intake = intake;
-    
+  /** Creates a new OnlyEngage. */
+  public OnlyEngage(drivetrain drive, Robot robot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    m_drivetrain = drive;
+    m_robot = robot;
+    addRequirements(m_drivetrain);
+    
     addCommands(
-      new ParallelCommandGroup(
-        new driveAuto(0.5, 0.5, m_drivetrain),
-        new extendArmCommand(m_arm)
-      ).withTimeout(3),
-      new pushIntakeCommand(m_intake).withTimeout(1)
+      new driveAuto(-0.5, -0.5, m_drivetrain).withTimeout(2),
+      new BalanceNoUltra(m_drivetrain, m_robot).withTimeout(3)
     );
   }
 }

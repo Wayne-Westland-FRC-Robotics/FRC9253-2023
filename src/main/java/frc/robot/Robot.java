@@ -22,6 +22,10 @@ public class Robot extends TimedRobot {
 
   private BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
 
+  /**
+   * get the tilt of the robot in degrees
+   * @return robot tilt
+   */
   public Double getRobotTilt() {
     return Math.asin(accelerometer.getY()*180/Math.PI);
   }
@@ -84,6 +88,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // set the default command for the driving based on the control type
 
     m_robotContainer.getDrivetrain().setDefaultCommand(
       m_robotContainer.getControlTypeChooser());    
