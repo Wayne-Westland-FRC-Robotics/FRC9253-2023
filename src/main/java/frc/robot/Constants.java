@@ -37,4 +37,10 @@ public final class Constants {
     public static final double INTAKE_OUTPUT_POWER = 1.0;
     public static final double INTAKE_HOLD_POWER = 0.07;
   }
+
+  public static class ControlSystemConstants {
+    public final static double BALANCE_TILT_LIMIT = 10;
+    public final static double BALANCE_SPEED = 0.07;
+    public final static double TILT_BOUND = 5;
+  }
 }
