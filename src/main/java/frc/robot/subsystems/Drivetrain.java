@@ -24,12 +24,20 @@ public class drivetrain extends SubsystemBase {
 
   private final DifferentialDrive diffDrive = new DifferentialDrive(leftMotors, rightMotors);
 
+  private double m_speedLimiter = 0.85;
+
+  public drivetrain() {
+    //startBrake();
+  }
+
   /**
    * set the speed and rotation for arcade driving
    * @param forwardSpeed the speed at which the robot moves forward
    * @param rotation the speed of rotation
    */
   public void arcadeDrive(Double forwardSpeed, Double rotation) {
+    forwardSpeed *= m_speedLimiter;
+    rotation *= m_speedLimiter;
     diffDrive.arcadeDrive(forwardSpeed, rotation);
   }
 
@@ -39,6 +47,8 @@ public class drivetrain extends SubsystemBase {
    * @param rightSpeed the speed of the right motors
    */
   public void tankDrive(double leftSpeed, double rightSpeed) {
+    leftSpeed *= m_speedLimiter;
+    rightSpeed *= m_speedLimiter;
     diffDrive.tankDrive(-leftSpeed, rightSpeed);
   }
 
@@ -60,6 +70,14 @@ public class drivetrain extends SubsystemBase {
     leftMotor2.setNeutralMode(NeutralMode.Coast);
     rightMotor1.setNeutralMode(NeutralMode.Coast);
     rightMotor2.setNeutralMode(NeutralMode.Coast);
+  }
+
+  public void setSpeedLimiter(double speedLimit) {
+    if (speedLimit <= 0 || speedLimit > 1) {
+      /* Speed limiter should be between 0 and 1 */
+      return;
+    }
+    m_speedLimiter = speedLimit;
   }
 
 }

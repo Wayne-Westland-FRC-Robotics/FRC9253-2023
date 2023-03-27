@@ -17,8 +17,8 @@ public class driveAuto extends CommandBase {
   /** Creates a new driveAuto. */
   public driveAuto(double lSpeed, double rSpeed, drivetrain Drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    leftSpeed = lSpeed;
-    rightSpeed = rSpeed;
+    leftSpeed = -lSpeed;
+    rightSpeed = -rSpeed;
     m_drivetrain = Drivetrain;
   }
 

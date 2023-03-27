@@ -12,6 +12,7 @@ import frc.robot.commands.OnlyMobility;
 import frc.robot.commands.ScoreWithEngage;
 import frc.robot.commands.ScoreWithMobility;
 import frc.robot.commands.arcadeDriveCommand;
+import frc.robot.commands.driveAuto;
 import frc.robot.commands.driveCommand;
 import frc.robot.commands.extendArmCommand;
 import frc.robot.commands.halfSpeedDrive;
@@ -24,7 +25,7 @@ import frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -45,19 +46,15 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController =
       new CommandXboxController(OperatorConstants.kOperatorControllerPort);
-  private final CommandJoystick m_driverJoystickR = 
-      new CommandJoystick(OperatorConstants.kDriverJoystickPortR);
-  private final CommandJoystick m_driverJoystickL =
-      new CommandJoystick(OperatorConstants.kDriverJoystickPortL);
+
 
 
 
   // commands for the flightsticks and xbox controllers
 
-  private final Command m_flightDrive = new driveCommand(m_driverJoystickL::getY, m_driverJoystickR::getY, m_drivetrain);
   private final Command m_xboxDrive = new driveCommand(m_driverController::getLeftY, m_driverController::getRightY, m_drivetrain);
   private final Command m_xboxArcadeDrive = new arcadeDriveCommand(m_driverController::getLeftY, m_driverController::getLeftX, m_drivetrain);
-  private final Command m_joystickArcadeDrive = new arcadeDriveCommand(m_driverJoystickR::getY, m_driverJoystickR::getX, m_drivetrain);
+
 
   // commands for autonomous period
 
@@ -76,9 +73,7 @@ public class RobotContainer {
     // control type options
 
     m_controlType.setDefaultOption("Xbox Controller Tank", m_xboxDrive);
-    m_controlType.addOption("Flightstick Tank", m_flightDrive);
     m_controlType.addOption("Xbox Controller Arcade", m_xboxArcadeDrive);
-    m_controlType.addOption("Flightstick Arcade", m_joystickArcadeDrive);
 
     // autonomous options
 
@@ -113,14 +108,12 @@ public class RobotContainer {
     m_operatorController.leftBumper().whileTrue(new pushIntakeCommand(m_intake));
     m_operatorController.rightBumper().whileTrue(new pullIntakeCommand(m_intake));
     m_driverController.rightBumper().whileTrue(new halfSpeedDrive(m_driverController::getLeftY, m_driverController::getRightY, m_drivetrain));
+    m_driverController.povUp().whileTrue(new extendArmCommand(m_arm));
+    m_driverController.povDown().whileTrue(new retractArmCommand(m_arm));
+    m_driverController.leftBumper().whileTrue(new pushIntakeCommand(m_intake));
+    m_driverController.rightBumper().whileTrue(new pullIntakeCommand(m_intake));
 
     // everything for the flightstick operation
-
-    m_driverJoystickL.button(3).whileTrue(new extendArmCommand(m_arm));
-    m_driverJoystickL.button(4).whileTrue(new retractArmCommand(m_arm));
-    m_driverJoystickR.button(3).whileTrue(new pushIntakeCommand(m_intake));
-    m_driverJoystickR.button(4).whileTrue(new pullIntakeCommand(m_intake));
-    m_driverJoystickL.button(5).whileTrue(new halfSpeedDrive(m_driverJoystickL::getY, m_driverJoystickR::getY, m_drivetrain));
 
   }
 
@@ -148,7 +141,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_chooser1.getSelected();
-    
+    //return m_chooser1.getSelected();
+    return new ParallelCommandGroup(new driveAuto(0.8, 0.8, m_drivetrain).withTimeout(2));
   }
 }

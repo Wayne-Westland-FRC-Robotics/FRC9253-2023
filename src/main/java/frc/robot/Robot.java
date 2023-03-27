@@ -92,7 +92,10 @@ public class Robot extends TimedRobot {
     // set the default command for the driving based on the control type
 
     m_robotContainer.getDrivetrain().setDefaultCommand(
-      m_robotContainer.getControlTypeChooser());    
+      m_robotContainer.getControlTypeChooser());   
+      
+    // set the robot to brake mode
+    m_robotContainer.getDrivetrain().startBrake();
   }
 
   /** This function is called periodically during operator control. */
